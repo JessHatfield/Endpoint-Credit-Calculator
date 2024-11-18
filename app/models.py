@@ -12,7 +12,7 @@ class UseageItem(BaseModel):
 
 
 class UseageReport(BaseModel):
-    useage: List[UseageItem] = Field(default_factory=list)
+    usage: List[UseageItem] = Field(default_factory=list)
 
 
 class CopilotMessage(BaseModel):

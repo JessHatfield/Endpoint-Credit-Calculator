@@ -33,4 +33,4 @@ async def get_useage_report():
         useage_items.append(useage_item)
     # We have to call model_dump here to remove nested report_name fields where value is none
     # There is probably a neater way of doing this, this was the quickest solution I could find
-    return UseageReport(useage=useage_items).model_dump(exclude_none=True)
+    return UseageReport(usage=useage_items).model_dump(exclude_none=True)
