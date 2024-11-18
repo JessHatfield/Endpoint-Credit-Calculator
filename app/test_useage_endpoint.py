@@ -49,7 +49,7 @@ def mock_calculate_cost_for_message():
     return Decimal('0.5')
 
 
-def test_get_useage_report_returns_useage_report():
+def test_get_useage_report_returns_useage_report_in_correct_format():
     """
     Confirms that we can generate a response with the correct json structure
     Confirms that the useage cost for each message can be populated
@@ -69,3 +69,13 @@ def test_get_useage_report_returns_useage_report():
                     {'credits_used': 0.1, 'message_id': 1082, 'report_name': 'Test Report', 'timestamp': '2024-05-03T21:17:32.996Z'}
                 ]}
 
+
+def test_integration_data_fetched_and_useage_returned():
+
+    """
+    I just added this quickly, so I had some way of running the code using live data via pycharms debugger
+    Given more time I'd add this to an integrations test folder and then exclude this folder from the commands used to run our test suite
+    """
+
+    response = client.get("/tech-task/usage/")
+    print(response.json())
