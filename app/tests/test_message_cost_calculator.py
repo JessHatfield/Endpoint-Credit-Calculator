@@ -22,10 +22,8 @@ def test_character_count_rule():
 @pytest.mark.parametrize('text,expected_cost', [
     ('cat bat', Decimal('0.2')),
     ('jeff steve jeremy jessica', Decimal('0.8')),
-     ('Octopus phlebotomist', Decimal('0.8')),
-     ('cat@ stev- octopus', Decimal('0.6'))]
+     ('Frenzied phlebotomist', Decimal('0.6')),
+     ('cat@ stev- phlebotomist', Decimal('0.6'))]
                          )
 def test_word_length_multipler_rule(text, expected_cost):
-    text = 'my hovercraft is full of eels'
-
     assert WordLengthMultiplierRule().calculate(text=text) == expected_cost
