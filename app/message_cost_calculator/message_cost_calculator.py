@@ -23,21 +23,43 @@ class CharacterCountRule(CalculatorRule):
 
 class WordLengthMultiplierRule(CalculatorRule):
     def calculate(self, text: str) -> Decimal:
-
         credit_cost = Decimal(0)
-
+        # Refactored this logic to its own function, I suspect we will be reusing it
         cleaned_word = remove_non_supported_characters(text)
         cleaned_word = cleaned_word.split(' ')
 
         for word in cleaned_word:
-            length=len(word)
 
-            if len(word) >= 1 and len(word) <= 3:
+            if 1 <= len(word) <= 3:
                 credit_cost += Decimal('0.1')
-            elif len(word) >= 4 and len(word) <= 7:
+            elif 4 <= len(word) <= 7:
                 credit_cost += Decimal('0.2')
             elif len(word) >= 8:
                 credit_cost += Decimal('0.3')
+
+        return credit_cost
+
+
+class AnyThirdCharacterIsVowelRule(CalculatorRule):
+    def calculate(self, text: str) -> Decimal:
+        """
+        The task specification does not provide a definition of Character
+        I've just taken this to mean any character including spaces
+        If we just wanted to limit this to alphabetical characters we could do via the remove_non_supported_characters util
+        """
+        vowels = ['a', 'e', 'i', 'o', 'u']
+
+        credit_cost = Decimal(0)
+
+        cleaned_text = text.lower()
+
+        count = 1
+        for character in cleaned_text:
+
+            if count % 3 == 0 and character in vowels:
+                credit_cost += Decimal('0.3')
+
+            count += 1
 
         return credit_cost
 
