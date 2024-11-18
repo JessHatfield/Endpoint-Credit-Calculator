@@ -14,17 +14,9 @@ def test_message_cost_calculator_applies_rules():
     assert calculator.calculate_cost(text=text) == Decimal(6)
 
 
-def test_message_cost_calculator_returns_a_min_value():
-    text = 'jeffrey bezo'
-
-    # We would expect the UniqueWordRule to return a value of -2!
-    calculator = MessageCostCalculator(calculators=[BaseCostRule(), UniqueWordRule()])
-    assert calculator.calculate_cost(text=text) == Decimal(1)
-
 
 def test_character_count_rule():
-    text = 'my hovercraft is full of eels'
-
+    text = 'my hovercraft is full of eels'  #29 characters long 0.05 credits per character
     assert CharacterCountRule().calculate(text=text) == Decimal('1.45')
 
 
@@ -57,11 +49,12 @@ def test_length_penalty_rule(text, expected_cost):
     assert LengthPenaltyRule().calculate(text=text) == expected_cost
 
 
-@pytest.mark.parametrize('text,expected_cost', [
-    ('Jeffrey Bezos', Decimal('-2')),  # All words are unique
-    ('Jeffrey jeffrey', Decimal('-2')),  # All words are unique taking into case
-    ('Bezo Bezo eggplant', Decimal(0))  # The words are not unique
+@pytest.mark.parametrize('text,existing_cost,expected_cost', [
+    ('Jeffrey Bezos', Decimal(5), Decimal('-2')),  # All words are unique
+    ('Jeffrey jeffrey', Decimal(5), Decimal('-2')),  # All words are unique taking into case
+    ('Bezo Bezo eggplant', Decimal(5), Decimal(0)) , # The words are not unique
+    ('Jeffrey Bezos', Decimal(2), Decimal(1)),  # All words are unique and expected_cost is capped
 ]
                          )
-def test_unique_word_rule(text, expected_cost):
-    assert UniqueWordRule().calculate(text=text) == expected_cost
+def test_unique_word_rule(text, existing_cost, expected_cost):
+    assert UniqueWordRule().calculate(text=text, current_cost=existing_cost) == expected_cost
