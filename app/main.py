@@ -1,13 +1,14 @@
-from decimal import Decimal
-from typing import List
+import logging
 
-from fastapi import FastAPI, Depends
-
-from app.models import UseageReport, UseageItem, CopilotMessages
+from fastapi import FastAPI
+from app.models import UseageReport, UseageItem
 from app.utils import get_copilot_messages, calculate_message_cost, add_report_details_for_messages
 
 app = FastAPI()
-
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+)
 
 @app.get("/tech-task/usage/")
 async def get_useage_report():

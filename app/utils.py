@@ -3,6 +3,7 @@ from decimal import Decimal
 
 import httpx
 from fastapi import HTTPException
+from fastapi.logger import logger
 
 from app.message_cost_calculator.message_cost_calculator import BaseCostRule, CharacterCountRule, \
     WordLengthMultiplierRule, AnyThirdCharacterIsVowelRule, LengthPenaltyRule, MessageCostCalculator, UniqueWordRule
@@ -42,6 +43,11 @@ async def add_report_details_for_messages(messages: CopilotMessages) -> Hydrated
             response = await client.get(url)
 
             if response.status_code == 404:
+                # I'd be using structlog in prod to make this message machine readable!
+                # I added this log statement so I could manually confirm our 404 logic was running + message costs where calculated
+                # This was quicker vs writing tests + mocking endpoints for this exact behaviour
+                # Obviously this would need to be under test in prod
+                logger.info(f'Could Not Find Report Details For Report - {copilot_message.report_id} - {copilot_message.id}')
                 # If we can't find a report then don't set credit cost or report name
                 return HydratedCopilotMessage(text=copilot_message.text, timestamp=copilot_message.timestamp,
                                               id=copilot_message.id, report_id=copilot_message.report_id)
