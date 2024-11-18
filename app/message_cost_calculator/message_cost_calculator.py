@@ -1,3 +1,4 @@
+import re
 from abc import ABC
 from decimal import Decimal
 from typing import List
@@ -93,6 +94,28 @@ class UniqueWordRule(CalculatorRule):
         return Decimal('-2')
 
 
+def is_text_a_palindrome(text: str) -> bool:
+    """
+    If the text is a palindrome then return true
+
+    Text is a palindrome if
+
+        -After removing non alphanumeric chars and lowercasing text
+        -It reads the same forward as backwards
+
+    """
+    pattern = r'\b[a-zA-Z0-9]+\b'
+    text = re.findall(pattern, text)
+    text = ''.join(text)
+    text=text.lower()
+
+    # I stole this bit of code from a perplexity answer!
+    if text == text[::-1]:
+        return True
+
+    return False
+
+
 class MessageCostCalculator:
     """
     We use a strategy pattern here to keep cost calculation
@@ -109,5 +132,11 @@ class MessageCostCalculator:
 
         for rule in self.__calculator_rules:
             credit_cost += rule.calculate(text, current_cost=credit_cost)
+
+        # In the interest of time I've just introduced to avoid writing the palindrome logic as a rule, as our calculator rules don't have
+        # access to the order of running Ideally the order should be a property of the MesageCostCalculator
+        # accessible via reference within calculator rules Same also applies to the credit_cost property!
+        if is_text_a_palindrome(text=text):
+            credit_cost = credit_cost * 2
 
         return credit_cost

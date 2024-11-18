@@ -14,6 +14,17 @@ def test_message_cost_calculator_applies_rules():
     assert calculator.calculate_cost(text=text) == Decimal(6)
 
 
+@pytest.mark.parametrize('text,expected_cost', [
+    ('Jeffrey Bezos', Decimal('1')),  # Not a palindrome so no multiplier is applied
+    ('Warsaw@ Was Raw', Decimal('2')),  # After processing this is a palindrome
+
+]
+                         )
+def test_message_cost_calculator_doubles_score_when_text_is_palindrome(text, expected_cost):
+    calculator = MessageCostCalculator(calculators=[BaseCostRule()])
+    assert calculator.calculate_cost(text=text) == expected_cost
+
+
 def test_character_count_rule():
     text = 'my hovercraft is full of eels'  #29 characters long 0.05 credits per character
     assert CharacterCountRule().calculate(text=text) == Decimal('1.45')
