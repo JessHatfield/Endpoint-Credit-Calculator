@@ -2,7 +2,6 @@ from decimal import Decimal
 from typing import List
 
 from fastapi import FastAPI, Depends
-from pydantic import BaseModel, Field
 
 from app.models import UseageReport, UseageItem, CopilotMessages
 from app.utils import get_copilot_messages, calculate_message_cost, add_report_details_for_messages
@@ -28,6 +27,10 @@ async def get_useage_report():
                                  credits_used=message.cost
                                  )
 
-        useage_items.append(useage_item)
+        if message.report_name:
+            useage_item.report_name = message.report_name
 
-    return UseageReport(useage=useage_items)
+        useage_items.append(useage_item)
+    # We have to call model_dump here to remove nested report_name fields where value is none
+    # There is probably a neater way of doing this, this was the quickest solution I could find
+    return UseageReport(useage=useage_items).model_dump(exclude_none=True)

@@ -64,4 +64,8 @@ def test_get_useage_report_returns_useage_report():
             with mock.patch('app.main.calculate_message_cost', return_value=mock_calculate_cost_for_message()):
                 response = client.get("/tech-task/usage/")
                 assert response.status_code == 200
-                assert response.json() == {}
+                assert response.json() == {'useage': [
+                    {'credits_used': 0.5, 'message_id': 1066, 'timestamp': '2024-05-03T01:04:01.375Z'},
+                    {'credits_used': 0.1, 'message_id': 1082, 'report_name': 'Test Report', 'timestamp': '2024-05-03T21:17:32.996Z'}
+                ]}
+
