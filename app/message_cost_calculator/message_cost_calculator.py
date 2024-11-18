@@ -64,6 +64,13 @@ class AnyThirdCharacterIsVowelRule(CalculatorRule):
         return credit_cost
 
 
+class LengthPenaltyRule(CalculatorRule):
+    def calculate(self, text: str) -> Decimal:
+        if len(text) > 100:
+            return Decimal(5)
+        return Decimal(0)
+
+
 class MessageCostCalculator:
     """
     We use a strategy pattern here to keep cost calculation

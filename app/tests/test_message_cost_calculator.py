@@ -3,7 +3,7 @@ from decimal import Decimal
 import pytest
 
 from app.message_cost_calculator.message_cost_calculator import MessageCostCalculator, BaseCostRule, CharacterCountRule, \
-    WordLengthMultiplierRule, AnyThirdCharacterIsVowelRule
+    WordLengthMultiplierRule, AnyThirdCharacterIsVowelRule, LengthPenaltyRule
 
 
 def test_message_cost_calculator_applies_rules():
@@ -38,3 +38,8 @@ def test_word_length_multipler_rule(text, expected_cost):
                          )
 def test_third_vowel_rule(text, expected_cost):
     assert AnyThirdCharacterIsVowelRule().calculate(text=text) == expected_cost
+
+@pytest.mark.parametrize('text,expected_cost', [('This is an example string which is definitely longer than 100 characters. Octopus Octopus Octopus Octopus Octopus',Decimal(5)),
+                                                ('I am a tiny little string',Decimal(0))])
+def test_length_penalty_rule(text,expected_cost):
+    assert LengthPenaltyRule().calculate(text=text)==expected_cost
