@@ -20,7 +20,7 @@ async def get_useage_report():
     for message in hydrated_messages.messages:
         # If we don't have a report cost then calculate it
         if not message.cost:
-            message.cost = calculate_message_cost(message=message.text)
+            message.cost = calculate_message_cost(message=message)
 
         useage_item = UseageItem(message_id=message.id,
                                  timestamp=message.timestamp,

@@ -4,6 +4,8 @@ from decimal import Decimal
 import httpx
 from fastapi import HTTPException
 
+from app.message_cost_calculator.message_cost_calculator import BaseCostRule, CharacterCountRule, \
+    WordLengthMultiplierRule, AnyThirdCharacterIsVowelRule, LengthPenaltyRule, MessageCostCalculator, UniqueWordRule
 from app.models import CopilotMessages, CopilotMessage, HydratedCopilotMessages, HydratedCopilotMessage
 
 API_URL = 'https://owpublic.blob.core.windows.net'
@@ -64,4 +66,9 @@ async def add_report_details_for_messages(messages: CopilotMessages) -> Hydrated
 
 
 def calculate_message_cost(message: CopilotMessage) -> Decimal:
-    pass
+    calculator = MessageCostCalculator(
+        calculators=[BaseCostRule(), CharacterCountRule(), WordLengthMultiplierRule(), AnyThirdCharacterIsVowelRule(),
+                     LengthPenaltyRule(),
+                     UniqueWordRule()])
+
+    return calculator.calculate_cost(text=message.text)

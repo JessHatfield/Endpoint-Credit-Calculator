@@ -1,10 +1,10 @@
 from decimal import Decimal
 from unittest import mock
 
-from .main import app
+from app.main import app
 from fastapi.testclient import TestClient
 
-from .models import CopilotMessages, CopilotMessage, HydratedCopilotMessage, HydratedCopilotMessages
+from app.models import CopilotMessages, CopilotMessage, HydratedCopilotMessage, HydratedCopilotMessages
 
 client = TestClient(app)
 
@@ -78,4 +78,5 @@ def test_integration_data_fetched_and_useage_returned():
     """
 
     response = client.get("/tech-task/usage/")
-    print(response.json())
+    data=response.json()
+    jeff=data
