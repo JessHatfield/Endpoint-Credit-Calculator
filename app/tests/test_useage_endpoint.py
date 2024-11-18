@@ -70,13 +70,14 @@ def test_get_useage_report_returns_useage_report_in_correct_format():
                 ]}
 
 
-def test_integration_data_fetched_and_useage_returned():
-
-    """
-    I just added this quickly, so I had some way of running the code using live data via pycharms debugger
-    Given more time I'd add this to an integrations test folder and then exclude this folder from the commands used to run our test suite
-    """
-
-    response = client.get("/tech-task/usage/")
-    data=response.json()
-    jeff=data
+# def test_integration_data_fetched_and_useage_returned():
+#
+#     """
+#     I just added this quickly, so I had some way of running the code using live data via pycharms debugger
+#     Given more time I'd add this to an manual scripts folder and then exclude this folder from the commands used to run our test suite
+#     This isn't a test it's just a harness to run our code via debugger
+#
+#     """
+#
+#     response = client.get("/tech-task/usage/")
+#     data=response.json()
