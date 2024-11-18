@@ -3,13 +3,22 @@ from decimal import Decimal
 import pytest
 
 from app.message_cost_calculator.message_cost_calculator import MessageCostCalculator, BaseCostRule, CharacterCountRule, \
-    WordLengthMultiplierRule, AnyThirdCharacterIsVowelRule, LengthPenaltyRule
+    WordLengthMultiplierRule, AnyThirdCharacterIsVowelRule, LengthPenaltyRule, UniqueWordRule
 
 
 def test_message_cost_calculator_applies_rules():
-    text = 'my hovercraft is full of eels'
+    text = ('This is an example string which is definitely longer than 100 characters. Octopus Octopus Octopus Octopus '
+            'Octopus')
+    # We get a cost of 5 from the length rule and then 1 from the base cost rule
+    calculator = MessageCostCalculator(calculators=[BaseCostRule(), LengthPenaltyRule()])
+    assert calculator.calculate_cost(text=text) == Decimal(6)
 
-    calculator = MessageCostCalculator(calculators=[BaseCostRule()])
+
+def test_message_cost_calculator_returns_a_min_value():
+    text = 'jeffrey bezo'
+
+    # We would expect the UniqueWordRule to return a value of -2!
+    calculator = MessageCostCalculator(calculators=[BaseCostRule(), UniqueWordRule()])
     assert calculator.calculate_cost(text=text) == Decimal(1)
 
 
@@ -39,7 +48,20 @@ def test_word_length_multipler_rule(text, expected_cost):
 def test_third_vowel_rule(text, expected_cost):
     assert AnyThirdCharacterIsVowelRule().calculate(text=text) == expected_cost
 
-@pytest.mark.parametrize('text,expected_cost', [('This is an example string which is definitely longer than 100 characters. Octopus Octopus Octopus Octopus Octopus',Decimal(5)),
-                                                ('I am a tiny little string',Decimal(0))])
-def test_length_penalty_rule(text,expected_cost):
-    assert LengthPenaltyRule().calculate(text=text)==expected_cost
+
+@pytest.mark.parametrize('text,expected_cost', [(
+        'This is an example string which is definitely longer than 100 characters. Octopus Octopus Octopus Octopus Octopus',
+        Decimal(5)),
+    ('I am a tiny little string', Decimal(0))])
+def test_length_penalty_rule(text, expected_cost):
+    assert LengthPenaltyRule().calculate(text=text) == expected_cost
+
+
+@pytest.mark.parametrize('text,expected_cost', [
+    ('Jeffrey Bezos', Decimal('-2')),  # All words are unique
+    ('Jeffrey jeffrey', Decimal('-2')),  # All words are unique taking into case
+    ('Bezo Bezo eggplant', Decimal(0))  # The words are not unique
+]
+                         )
+def test_unique_word_rule(text, expected_cost):
+    assert UniqueWordRule().calculate(text=text) == expected_cost

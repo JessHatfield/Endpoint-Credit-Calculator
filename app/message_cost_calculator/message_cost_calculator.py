@@ -2,7 +2,7 @@ from abc import ABC
 from decimal import Decimal
 from typing import List
 
-from app.message_cost_calculator.text_utils import remove_non_supported_characters
+from app.message_cost_calculator.text_utils import extract_words
 
 
 class CalculatorRule(ABC):
@@ -25,10 +25,9 @@ class WordLengthMultiplierRule(CalculatorRule):
     def calculate(self, text: str) -> Decimal:
         credit_cost = Decimal(0)
         # Refactored this logic to its own function, I suspect we will be reusing it
-        cleaned_word = remove_non_supported_characters(text)
-        cleaned_word = cleaned_word.split(' ')
+        words = extract_words(text)
 
-        for word in cleaned_word:
+        for word in words:
 
             if 1 <= len(word) <= 3:
                 credit_cost += Decimal('0.1')
@@ -60,7 +59,6 @@ class AnyThirdCharacterIsVowelRule(CalculatorRule):
                 credit_cost += Decimal('0.3')
 
             count += 1
-
         return credit_cost
 
 
@@ -69,6 +67,26 @@ class LengthPenaltyRule(CalculatorRule):
         if len(text) > 100:
             return Decimal(5)
         return Decimal(0)
+
+
+class UniqueWordRule(CalculatorRule):
+    def calculate(self, text: str) -> Decimal:
+        word_count = {}
+
+        words = extract_words(text)
+        # Check if the word has already been seen, if it has then exit early
+        for word in words:
+            exists = word_count.get(word, None)
+            if not exists:
+                word_count[word] = 1
+            else:
+                word_count[word] += 1
+
+            if word_count[word] > 1:
+                return Decimal(0)
+
+        # Reaching here means that we have not see any duplicate words
+        return Decimal('-2')
 
 
 class MessageCostCalculator:
@@ -83,9 +101,12 @@ class MessageCostCalculator:
         self.__calculator_rules = calculators
 
     def calculate_cost(self, text):
-        cost = Decimal(0)
+        credit_cost = Decimal(0)
 
         for rule in self.__calculator_rules:
-            cost += rule.calculate(text)
+            credit_cost += rule.calculate(text)
 
-        return cost
+        if credit_cost < Decimal(1):
+            return Decimal(1)
+
+        return credit_cost
