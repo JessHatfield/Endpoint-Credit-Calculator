@@ -86,7 +86,6 @@ class UniqueWordRule(CalculatorRule):
                 return Decimal(0)
 
         # Ensure we don't return a negative value
-        jeff=current_cost - Decimal('-2')
         if current_cost + Decimal('-2') < Decimal(1):
             return Decimal(1)
 
