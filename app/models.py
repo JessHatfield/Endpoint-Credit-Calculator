@@ -4,15 +4,15 @@ from typing import List
 from pydantic import BaseModel, Field, ConfigDict
 
 
-class UseageItem(BaseModel):
+class UsageItem(BaseModel):
     message_id: int
     timestamp: str
     report_name: str | None = None
     credits_used: Decimal
 
 
-class UseageReport(BaseModel):
-    usage: List[UseageItem] = Field(default_factory=list)
+class UsageReport(BaseModel):
+    usage: List[UsageItem] = Field(default_factory=list)
 
 
 class CopilotMessage(BaseModel):
