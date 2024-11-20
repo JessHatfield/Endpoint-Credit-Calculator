@@ -22,14 +22,13 @@ My solution implements the required logic in a testable, easy to read manner and
 - To keep the build process smooth I took a test driven approach, building tests first and then writing logic to pass
 - I wrote a short integration test and used this to flush out exceptions, confirm no messages where missed by our endpoint and indirectly test our logic fetching messages and reports
 - I used decimals to represent credit_cost rather than floating points in order avoid a host of accuracy errors!
+- I've allowed the application to fail with a 500 code if unexpected errors occur, it's better to give no usage cost vs an incomplete usage cost
 
 
-### Things I would have added with more time:
+### Things I would have added with a little more time:
 
-- Placing the logic calling the messages and reports endpoint under unit test
-- Machine-readable logs and a sentry integration
-- Caching on the function fetching report information
-- Sticking the application in Docker
+- Unit testing the code that requests messages and reports
+- Sticking the application in Docker to save you time on set up
 
 ### What steps did I take to ensure the data we provide is accurate
 
