@@ -1,9 +1,14 @@
 # Orbital Witness Backend Engineering Task - Copilot Usage Endpoint
 
+## The Task 
+
+I was asked to build a simple python API to calculate the usage cost of the Orbital Copilot service
+
+Full details can be found [here](https://orbitalwitness.notion.site/Backend-Engineering-Task-1281572580cc80fc9152f1c3c076cd30) 
 
 ## About My Solution
 
-I've used FastAPI to build a small service to calculate usage costs for the Orbital Copilot product. 
+I've used FastAPI to build a small API to calculate usage costs for the Orbital Copilot product. 
 
 This my first time using FastAPI, I chose to use it here:
 - Orbital Witness already use FastAPI in their tech stack and I wanted to get more experience with
