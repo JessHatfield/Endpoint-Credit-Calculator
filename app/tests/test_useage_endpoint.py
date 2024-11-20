@@ -56,11 +56,11 @@ def mock_get_report_costs_for_messages():
                                    cost=Decimal('0.1'),
                                    ),
             HydratedCopilotMessage(text='Please create a Short Lease Report for the residential property',
-                           timestamp="2024-05-03T21:17:32.996Z",
-                           report_id=1124,
-                           id=1014,
-                           cost=None
-                           )
+                                   timestamp="2024-05-03T21:17:32.996Z",
+                                   report_id=1124,
+                                   id=1014,
+                                   cost=None
+                                   )
         ]
 
     )
@@ -70,7 +70,7 @@ def mock_calculate_cost_for_message():
     return Decimal('0.5')
 
 
-def test_get_useage_report_returns_response_in_correct_format():
+def test_get_usage_report_returns_response_in_correct_format():
     """
     Confirms that we can generate a response with the correct json structure
     Confirms that the useage cost for each message can be populated
@@ -85,14 +85,6 @@ def test_get_useage_report_returns_response_in_correct_format():
             with mock.patch('app.main.calculate_message_cost', return_value=mock_calculate_cost_for_message()):
                 response = client.get("/tech-task/usage/")
                 assert response.status_code == 200
-
-                data=response.json()
-                assert response.json() == {'usage': [
-                    {'credits_used': 0.5, 'message_id': 1066, 'timestamp': '2024-05-03T01:04:01.375Z'},
-                    {'credits_used': 0.1, 'message_id': 1082, 'report_name': 'Test Report', 'timestamp': '2024-05-03T21:17:32.996Z'}
-                ]}
-
-
-
-
-
+                # The order of keys is inconsistent in this test vs the result returned from the actual API
+                # Not an iss
+                assert response.json() == {'usage': [{'message_id': 1066, 'timestamp': '2024-05-03T01:04:01.375Z', 'credits_used': 0.5}, {'message_id': 1082, 'timestamp': '2024-05-03T21:17:32.996Z', 'report_name': 'Test Report', 'credits_used': 0.1}, {'message_id': 1014, 'timestamp': '2024-05-03T21:17:32.996Z', 'credits_used': 0.5}]}

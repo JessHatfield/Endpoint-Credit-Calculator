@@ -65,6 +65,7 @@ async def add_report_details_for_messages(messages: CopilotMessages) -> Hydrated
                                       cost=cost)
 
     async with httpx.AsyncClient() as client:
+
         tasks = [make_request(client, copilot_message) for copilot_message in messages.messages]
         results = await asyncio.gather(*tasks)
 
