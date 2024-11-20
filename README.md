@@ -3,17 +3,16 @@
 
 ## About My Solution
 
-I've used FastAPI to build an endpoint to calculate usage costs for the Orbital Copilot product. 
+I've used FastAPI to build a small service to calculate usage costs for the Orbital Copilot product. 
 
 This my first time using FastAPI, I chose to use it here:
 - Orbital Witness already use FastAPI in their tech stack and I wanted to get more experience with
-- Django felt like overkill, it would bring more complexity without extra benefit
-- FastAPIs pydantic support means it was easy to create a response structure that matches the spec
-- 
+- Django and DRF would have brought extra complexity without extra benefit
+- FastAPIs native pydantic support means it was easy to create a response structure that matches the spec
 
-I really enjoyed this exercise, after about 30 minutes of planning time I was able to build and test the whole project in about 3 hours 40 mins!
+Overall I really enjoyed this exercise, after about 30 minutes of planning time I was able to build and test the whole project in about 3 hours 40 mins!
 
-My solution implements the required logic in a testable, easy to read manner and returns accurate result very quickly.
+My solution implements the required logic in a testable, easy to read manner and returns accurate result very quickly
 
 ### Decisions worth highlighting:
 
@@ -30,6 +29,7 @@ My solution implements the required logic in a testable, easy to read manner and
 - Placing the logic calling the messages and reports endpoint under unit test
 - Machine-readable logs and a sentry integration
 - Caching on the function fetching report information
+- Sticking the application in Docker
 
 ### What steps did I take to ensure the data we provide is accurate
 
@@ -52,10 +52,46 @@ I've tried to ensure each step in the usage endpoint call was covered by some ty
   - I spot checked a couple of usage results to confirm they had the correct cost
 
 
-  - I've written a quick integration test to confirm that all messages from the /messages/current-period endpoint are present in our endpoints output
+  - I've also written a quick integration test to confirm that all messages from the /messages/current-period endpoint are present in our endpoints output
 
 
-## How To Run My Project
+## Getting Started
+
+Here are instructions for setting this project up via the terminal
+
+Alternatively you might prefer to import the project directly from GitHub via your ide of choice (I'm using pycharm)
+
+1. Clone the repository:
+    ```shell
+    git clone https://github.com/JessHatfield/Endpoint-Credit-Calculator
+    cd Endpoint-Credit-Calculator
+    ```
+
+2. Install requirements 
+    ```shell
+    python -m venv .venv
+    source .venv/bin/activate
+    pip install --no-cache-dir -r requirements.txt
+    ```
+
+3. Run our tests
+    ```shell
+    pytest /app/tests
+    ```
+
+4. Run our server
+    ```shell
+    python -m uvicorn app.main:app --reload
+    ```
+
+5. Fetch usage data
+    
+    Via curl
+    ```shell
+    curl -H -i http://127.0.0.1:8000/tech-task/usage/
+    ```
+    Via pycharm -> Double click test_main.http
+
 
 
 
