@@ -80,7 +80,7 @@ Alternatively you might prefer to import the project directly from GitHub via yo
 
 3. Run our tests
     ```shell
-    pytest /app/tests
+    pytest ./app/tests
     ```
 
 4. Run our server
