@@ -11,7 +11,7 @@ Full details can be found [here](https://orbitalwitness.notion.site/Backend-Engi
 I've used FastAPI to build a small API to calculate usage costs for the Orbital Copilot product. 
 
 This my first time using FastAPI, I chose to use it here:
-- Orbital Witness already use FastAPI in their tech stack and I wanted to get more experience with
+- Orbital Witness already use FastAPI in their tech stack and I wanted to get more experience with it
 - Django and DRF would have brought extra complexity without extra benefit
 - FastAPIs native pydantic support means it was easy to create a response structure that matches the spec
 
