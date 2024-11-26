@@ -73,6 +73,10 @@ async def add_report_details_for_messages(messages: CopilotMessages) -> Hydrated
 
 
 def calculate_message_cost(message: CopilotMessage) -> Decimal:
+
+    if not message.text:
+        return BaseCostRule().calculate(text=message)
+
     calculator = MessageCostCalculator(
         calculators=[BaseCostRule(), CharacterCountRule(), WordLengthMultiplierRule(), AnyThirdCharacterIsVowelRule(),
                      LengthPenaltyRule(),

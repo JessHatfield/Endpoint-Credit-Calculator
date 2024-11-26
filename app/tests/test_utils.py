@@ -26,3 +26,21 @@ def test_calculate_message_cost_works_with_real_message():
                                      report_name=None)
 
     assert calculate_message_cost(message=message) == Decimal('5.20')
+
+
+def test_calculate_message_cost_works_with_empty_string():
+    """
+        Following rules applied
+
+        Base cost of 1
+
+        """
+
+    message = HydratedCopilotMessage(text='',
+                                     timestamp='2024-04-29T03:25:03.613Z',
+                                     id=1001,
+                                     report_id=None,
+                                     cost=None,
+                                     report_name=None)
+
+    assert calculate_message_cost(message=message) == Decimal('1')
